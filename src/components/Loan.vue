@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     submit: function () {
-
+      this.$router.push('client')
     }
   }
 }

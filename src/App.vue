@@ -2,7 +2,7 @@
   <div id="app">
     <div class="container">
       <Header />
-      <Loan />
+      <router-view></router-view>
     </div>
   </div>
 </template>
