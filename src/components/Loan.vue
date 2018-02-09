@@ -3,7 +3,10 @@
     <form>
       <div class="form-group">
         <label class="form-control-label">Valor Empréstimo</label>
-        <money class="form-control" v-model="loan.value" v-bind="loan.format"></money>
+        <money class="form-control" :class="{'is-invalid': $v.loan.value.$error}" v-model="loan.value" v-bind="loan.format" @input="$v.loan.value.$touch()"></money>
+        <div class="invalid-feedback" v-if="$v.loan.value.$error">
+          <span v-if="!$v.loan.value.between">Error</span>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-control-label">Parcelas</label>
@@ -22,7 +25,10 @@
       </div>
       <div class="form-group">
         <label class="form-control-label">Juros</label>
-        <money class="form-control" v-model="interestRate.value" v-bind="interestRate.format"></money>
+        <money class="form-control" :class="{'is-invalid': $v.interestRate.value.$error}" v-model="interestRate.value" v-bind="interestRate.format" @input="$v.interestRate.value.$touch()"></money>
+        <div class="invalid-feedback" v-if="$v.interestRate.value.$error">
+          <span v-if="!$v.interestRate.value.between">Error</span>
+        </div>
       </div>
     </form>
     <div class="card preview">
@@ -62,6 +68,7 @@
 
 <script>
 import { Money } from 'v-money'
+import { between } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Loan',
@@ -81,7 +88,7 @@ export default {
       },
       months: 3,
       interestRate: {
-        value: 0,
+        value: 3,
         format: {
           decimal: ',',
           thousands: '.',
@@ -93,10 +100,29 @@ export default {
       }
     }
   },
+  validations: {
+    loan: {
+      value: {
+        between: between(0, 100000)
+      }
+    },
+    interestRate: {
+      value: {
+        between: between(3, 8)
+      }
+    }
+  },
   computed: {
     monthPayment: function () {
       const interestDecimal = this.interestRate.value / 100
-      return Math.ceil((this.loan.value * interestDecimal) / (1 - (1 / (Math.pow(1 + interestDecimal, this.months)))) * 100) / 100
+      return (
+        Math.ceil(
+          this.loan.value *
+            interestDecimal /
+            (1 - 1 / Math.pow(1 + interestDecimal, this.months)) *
+            100
+        ) / 100
+      )
     },
     total: function () {
       return Math.ceil(this.months * this.monthPayment * 100) / 100
