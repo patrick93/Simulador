@@ -130,6 +130,8 @@ export default {
   },
   methods: {
     submit: function () {
+      this.$store.setLoan({ months: this.months, value: this.loan.value, interestRate: this.interestRate.value })
+      console.log(this.$store.getState())
       this.$router.push('client')
     }
   }

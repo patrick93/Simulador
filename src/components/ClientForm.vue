@@ -48,8 +48,8 @@ export default {
   },
   methods: {
     submit: function () {
-      console.log(this.email)
-      console.log(this.cnpj)
+      this.$store.setClient({ cnpj: this.cnpj, email: this.email })
+      console.log(this.$store.getState())
     }
   }
 }
