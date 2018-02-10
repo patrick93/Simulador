@@ -6,6 +6,7 @@
         <the-mask mask="##.###.###/####-##" :masked="false" type="text" class="form-control" :class="{'is-invalid': $v.cnpj.$error}" @input="$v.cnpj.$touch()" v-model="cnpj"></the-mask>
         <div class="invalid-feedback" v-if="$v.cnpj.$error">
           <span v-if="!$v.cnpj.required">Required</span>
+          <span v-if="!$v.cnpj.cnpj">CNPJ inválido</span>
         </div>
       </div>
       <div class="form-group">
@@ -24,6 +25,7 @@
 <script>
 import { TheMask } from 'vue-the-mask'
 import { required, email } from 'vuelidate/lib/validators'
+import cnpj from '../utils/custom-validators'
 
 export default {
   name: 'ClientForm',
@@ -40,7 +42,8 @@ export default {
       email
     },
     cnpj: {
-      required
+      required,
+      cnpj
     }
   },
   methods: {
