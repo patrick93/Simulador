@@ -3,7 +3,7 @@
     <form>
       <div class="form-group">
         <label class="form-control-label">CNPJ</label>
-        <the-mask mask="##.###.###/####-##" :masked="false" type="text" class="form-control" :class="{'is-invalid': $v.cnpj.$error}" @input="$v.cnpj.$touch()" v-model="cnpj"></the-mask>
+        <the-mask mask="##.###.###/####-##" :masked="true" type="text" class="form-control" :class="{'is-invalid': $v.cnpj.$error}" @input="$v.cnpj.$touch()" v-model="cnpj"></the-mask>
         <div class="invalid-feedback" v-if="$v.cnpj.$error">
           <span v-if="!$v.cnpj.required">Required</span>
           <span v-if="!$v.cnpj.cnpj">CNPJ inválido</span>
@@ -49,7 +49,11 @@ export default {
   methods: {
     submit: function () {
       this.$store.setClient({ cnpj: this.cnpj, email: this.email })
-      console.log(this.$store.getState())
+      this.$http.post('https://httpbin.org/post', this.$store.getState()).then(response => {
+        this.$router.push('/summary')
+      }, error => {
+        console.error(error)
+      })
     }
   }
 }

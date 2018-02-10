@@ -36,30 +36,7 @@
         Resultado
       </div>
       <div class="card-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <th>Valor</th>
-              <td>{{loan.value.toLocaleString('pt-BR')}}</td>
-            </tr>
-            <tr>
-              <th>Parcelas</th>
-              <td>{{months.toLocaleString('pt-BR')}}</td>
-            </tr>
-            <tr>
-              <th>Juros</th>
-              <td>{{interestRate.value.toLocaleString('pt-BR')}}</td>
-            </tr>
-            <tr>
-              <th>Valor Parcelas</th>
-              <td>{{monthPayment.toLocaleString('pt-BR')}}</td>
-            </tr>
-            <tr>
-              <th>Total</th>
-              <td>{{total.toLocaleString('pt-BR')}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <loan-preview :loan-value="loan.value" :months="months" :interest-rate="interestRate.value"></loan-preview>
       </div>
     </div>
     <button class="btn btn-success submit-button" v-on:click="submit">Enviar</button>
@@ -69,10 +46,11 @@
 <script>
 import { Money } from 'v-money'
 import { between } from 'vuelidate/lib/validators'
+import LoanPreview from './LoanPreview'
 
 export default {
   name: 'Loan',
-  components: { Money },
+  components: { Money, LoanPreview },
   data () {
     return {
       loan: {
@@ -110,22 +88,6 @@ export default {
       value: {
         between: between(3, 8)
       }
-    }
-  },
-  computed: {
-    monthPayment: function () {
-      const interestDecimal = this.interestRate.value / 100
-      return (
-        Math.ceil(
-          this.loan.value *
-            interestDecimal /
-            (1 - 1 / Math.pow(1 + interestDecimal, this.months)) *
-            100
-        ) / 100
-      )
-    },
-    total: function () {
-      return Math.ceil(this.months * this.monthPayment * 100) / 100
     }
   },
   methods: {

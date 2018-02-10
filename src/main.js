@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Vuelidate from 'vuelidate'
 import money from 'v-money'
+import VueResource from 'vue-resource'
 
 import App from './App'
 import AppRouter from './routes/AppRouter'
@@ -17,6 +18,7 @@ Vue.config.productionTip = false
 
 Vue.use(Router)
 Vue.use(Vuelidate)
+Vue.use(VueResource)
 Vue.use(money, {precision: 4})
 
 Vue.mixin({
