@@ -20,7 +20,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* Space out content a bit */
 body {
   padding-top: 1.5rem;

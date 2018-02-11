@@ -1,6 +1,6 @@
 <template>
   <div class="header clearfix">
-    <a href="/"><h3 class="text-muted">Simulador</h3></a>
+    <router-link to="/"><h3 class="text-muted">Simulador</h3></router-link>
   </div>
 </template>
 
