@@ -5,11 +5,11 @@
         <label class="form-control-label">Valor Empréstimo</label>
         <money class="form-control" :class="{'is-invalid': $v.loan.value.$error}" v-model="loan.value" v-bind="loan.format" @input="$v.loan.value.$touch()"></money>
         <div class="invalid-feedback" v-if="$v.loan.value.$error">
-          <span v-if="!$v.loan.value.between">Error</span>
+          <span v-if="!$v.loan.value.between">O valor do empréstimo deve ser entre {{$v.loan.value.$params.between.min.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}} e {{$v.loan.value.$params.between.max.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}}</span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-control-label">Parcelas</label>
+        <label class="form-control-label">Meses</label>
         <select v-model="months" class="form-control">
           <option>3</option>
           <option>4</option>
@@ -27,7 +27,7 @@
         <label class="form-control-label">Juros</label>
         <money class="form-control" :class="{'is-invalid': $v.interestRate.value.$error}" v-model="interestRate.value" v-bind="interestRate.format" @input="$v.interestRate.value.$touch()"></money>
         <div class="invalid-feedback" v-if="$v.interestRate.value.$error">
-          <span v-if="!$v.interestRate.value.between">Error</span>
+          <span v-if="!$v.interestRate.value.between">A taxa de juros deve ser entre {{$v.interestRate.value.$params.between.min.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}}% e {{$v.interestRate.value.$params.between.max.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}}%</span>
         </div>
       </div>
     </form>
@@ -39,7 +39,7 @@
         <loan-preview :loan-value="loan.value" :months="months" :interest-rate="interestRate.value"></loan-preview>
       </div>
     </div>
-    <button class="btn btn-success submit-button" v-on:click="submit">Enviar</button>
+    <button class="btn btn-success submit-button" :disabled="isFormValid()" v-on:click="submit">Enviar</button>
   </div>
 </template>
 
@@ -94,31 +94,15 @@ export default {
     submit: function () {
       this.$store.setLoan({ months: this.months, value: this.loan.value, interestRate: this.interestRate.value })
       this.$router.push('client')
+    },
+    isFormValid: function () {
+      return this.$v.$invalid
     }
   }
 }
 </script>
 
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-
 .preview {
   margin-bottom: 10px;
 }

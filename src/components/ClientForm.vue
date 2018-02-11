@@ -5,7 +5,7 @@
         <label class="form-control-label">CNPJ</label>
         <the-mask mask="##.###.###/####-##" :masked="true" type="text" class="form-control" :class="{'is-invalid': $v.cnpj.$error}" @input="$v.cnpj.$touch()" v-model="cnpj"></the-mask>
         <div class="invalid-feedback" v-if="$v.cnpj.$error">
-          <span v-if="!$v.cnpj.required">Required</span>
+          <span v-if="!$v.cnpj.required">Este campo é necessário</span>
           <span v-if="!$v.cnpj.cnpj">CNPJ inválido</span>
         </div>
       </div>
@@ -13,12 +13,12 @@
         <label class="form-control-label">Email</label>
         <input type="email" v-model="email" class="form-control" :class="{'is-invalid': $v.email.$error}" @input="$v.email.$touch()">
         <div class="invalid-feedback" v-if="$v.email.$error">
-          <span v-if="!$v.email.required">Required</span>
-          <span v-if="!$v.email.email">Invalid email</span>
+          <span v-if="!$v.email.required">Este campo é necessário</span>
+          <span v-if="!$v.email.email">Email inválido</span>
         </div>
       </div>
     </form>
-    <button class="btn btn-success submit-button" v-on:click="submit">Enviar</button>
+    <button class="btn btn-success submit-button" :disabled="isFormValid() || loading" v-on:click="submit">{{ getSubmitButtonMessage() }}</button>
   </div>
 </template>
 
@@ -33,7 +33,8 @@ export default {
   data () {
     return {
       email: '',
-      cnpj: ''
+      cnpj: '',
+      loading: false
     }
   },
   validations: {
@@ -48,12 +49,21 @@ export default {
   },
   methods: {
     submit: function () {
+      this.loading = true
       this.$store.setClient({ cnpj: this.cnpj, email: this.email })
       this.$http.post('https://httpbin.org/post', this.$store.getState()).then(response => {
+        this.loading = false
         this.$router.push('/summary')
       }, error => {
+        this.loading = false
         console.error(error)
       })
+    },
+    isFormValid: function () {
+      return this.$v.$invalid
+    },
+    getSubmitButtonMessage: function () {
+      return this.loading ? 'Enviando...' : 'Enviar'
     }
   }
 }

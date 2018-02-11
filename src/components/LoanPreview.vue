@@ -7,7 +7,7 @@
           <td class="w-50">{{loanValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}}</td>
         </tr>
         <tr>
-          <th class="w-50">Parcelas</th>
+          <th class="w-50">Meses</th>
           <td class="w-50">{{months.toLocaleString('pt-BR')}}</td>
         </tr>
         <tr>
@@ -15,7 +15,7 @@
           <td class="w-50">{{interestRate.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}} %</td>
         </tr>
         <tr>
-          <th class="w-50">Valor Parcelas</th>
+          <th class="w-50">Parcelas</th>
           <td class="w-50">{{monthPayment.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}}</td>
         </tr>
         <tr>
