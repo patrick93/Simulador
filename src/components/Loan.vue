@@ -10,17 +10,8 @@
       </div>
       <div class="form-group">
         <label class="form-control-label">Meses</label>
-        <select v-model="months" class="form-control">
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-          <option>6</option>
-          <option>7</option>
-          <option>8</option>
-          <option>9</option>
-          <option>10</option>
-          <option>11</option>
-          <option>12</option>
+        <select v-model="months.value" class="form-control">
+          <option :key="opt" v-for="opt in months.options" :value="opt">{{opt}}</option>
         </select>
       </div>
       <div class="form-group">
@@ -36,7 +27,7 @@
         Resultado
       </div>
       <div class="card-body">
-        <loan-preview :loan-value="loan.value" :months="months" :interest-rate="interestRate.value"></loan-preview>
+        <loan-preview :loan-value="loan.value" :months="months.value" :interest-rate="interestRate.value"></loan-preview>
       </div>
     </div>
     <button class="btn btn-success submit-button" :disabled="isFormValid()" v-on:click="submit">Enviar</button>
@@ -64,7 +55,10 @@ export default {
           masked: false
         }
       },
-      months: 3,
+      months: {
+        value: 3,
+        options: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      },
       interestRate: {
         value: 3,
         format: {
@@ -92,7 +86,7 @@ export default {
   },
   methods: {
     submit: function () {
-      this.$store.setLoan({ months: this.months, value: this.loan.value, interestRate: this.interestRate.value })
+      this.$store.setLoan({ months: this.months.value, value: this.loan.value, interestRate: this.interestRate.value })
       this.$router.push('client')
     },
     isFormValid: function () {
